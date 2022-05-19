@@ -16,4 +16,13 @@ interface ApiInterface {
     @POST("users")
     fun addUser(@Body Userdata: User):Call<User>
 
+    @POST("locations")
+    fun addLocation(@Body LocationData: Location):Call<Location>
+
+    @POST("accelerometers")
+    fun addAccelerometer(@Body AccelerometerData: Accelerometer):Call<Accelerometer>
+
+    @POST("gyroscopes")
+    fun addGyroscope(@Body GyroscopeData: Gyroscope):Call<Gyroscope>
+
 }

@@ -3,7 +3,7 @@ package com.example.projektandroid
 import java.util.*
 
 
-data class location (
+data class Location (
     val body: String,
     val _id: String,
     val latitude: Float,

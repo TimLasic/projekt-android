@@ -1,6 +1,6 @@
 package com.example.projektandroid
 
-data class accelerometer(
+data class Accelerometer(
     val body: String,
     val _id: String,
     val x: Float,
