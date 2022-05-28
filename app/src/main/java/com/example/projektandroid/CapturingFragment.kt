@@ -1,6 +1,7 @@
 package com.example.projektandroid
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.content.Context
 import android.content.pm.PackageManager
 
@@ -75,6 +76,14 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
             SensorManager.SENSOR_DELAY_UI
         )
 
+        val sensorGyroscope: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_GYROSCOPE)
+        sensorManager.registerListener(
+            this,
+            sensorGyroscope,
+            SensorManager.SENSOR_DELAY_NORMAL,
+            SensorManager.SENSOR_DELAY_UI
+        )
+
     }
 
     /*private fun setUpLocation() {
@@ -118,6 +127,7 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
 
     }*/
 
+    @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
         if (event?.sensor?.type == Sensor.TYPE_ACCELEROMETER) {
             val alpha: Float = 0.8f
@@ -145,6 +155,27 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
             lastUpdateAccelerometer = time
 
 
+            Log.d("acce", "$x, $y, $z")
+
+            binding.acceX.text = "X: " + x.toInt() + " m/s^2"
+            binding.acceY.text = "Y: " + y.toInt() + " m/s^2"
+            binding.acceZ.text = "Z: " + z.toInt() + " m/s^2"
+        }
+
+        if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
+            var x: Float = 0.0f
+            var y: Float = 0.0f
+            var z: Float = 0.0f
+
+            x = event.values[0]
+            y = event.values[1]
+            z = event.values[2]
+
+            Log.d("gyro", "$x, $y, $z")
+
+            binding.gyroX.text = "X: " + x.toInt() + " rad/s"
+            binding.gyroY.text = "Y: " + y.toInt() + " rad/s"
+            binding.gyroZ.text = "Z: " + z.toInt() + " rad/s"
         }
     }
 
