@@ -149,7 +149,8 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
     }
 
     override fun onAccuracyChanged(p0: Sensor?, p1: Int) {
-        TODO("Not yet implemented")
+        //TODO("Not yet implemented")
+        Log.d("zmaj", "erwtert");
     }
 
     override fun onPause() {
