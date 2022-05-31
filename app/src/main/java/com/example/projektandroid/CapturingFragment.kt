@@ -40,6 +40,7 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        (activity as MainActivity).getLocationUpdates()
     }
 
     override fun onCreateView(
@@ -187,11 +188,12 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
     override fun onPause() {
         super.onPause()
         sensorManager.unregisterListener(this)
+        (activity as MainActivity).stopLocationUpdates()
     }
 
     override fun onResume() {
         super.onResume()
-
+        (activity as MainActivity).startLocationUpdates()
         setUpSensor()
     }
 
