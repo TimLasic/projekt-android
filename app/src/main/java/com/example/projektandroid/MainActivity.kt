@@ -3,6 +3,8 @@ package com.example.projektandroid
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.os.Looper
+import android.util.Log
 import com.google.android.material.snackbar.Snackbar
 import androidx.appcompat.app.AppCompatActivity
 import androidx.navigation.findNavController
@@ -11,6 +13,7 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
@@ -24,7 +27,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
-
 
     private var activityResultLauncher: ActivityResultLauncher<Array<String>>
     init {
@@ -88,9 +90,9 @@ class MainActivity : AppCompatActivity() {
 
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create()
-        locationRequest.interval = 50000
-        locationRequest.fastestInterval = 50000
-        locationRequest.smallestDisplacement = 170f // 170 m = 0.1 mile
+        locationRequest.interval = 5000
+        locationRequest.fastestInterval = 1000
+        locationRequest.smallestDisplacement = 5f // 170 m = 0.1 mile
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(locationResult: LocationResult?) {
@@ -102,8 +104,9 @@ class MainActivity : AppCompatActivity() {
                         locationResult.lastLocation
                     // use your location object
                     // get latitude , longitude and other info from this
-                }
 
+                    Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
+                }
 
             }
         }
@@ -125,7 +128,7 @@ class MainActivity : AppCompatActivity() {
         fusedLocationClient.requestLocationUpdates(
             locationRequest,
             locationCallback,
-            null /* Looper */
+            Looper.getMainLooper() /* Looper */
         )
     }
 

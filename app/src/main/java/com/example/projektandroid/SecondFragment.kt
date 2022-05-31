@@ -1,6 +1,5 @@
 package com.example.projektandroid
 
-import User
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log

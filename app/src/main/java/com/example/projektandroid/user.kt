@@ -1,3 +1,4 @@
+package com.example.projektandroid
 
 data class User (
     //@SerializedName("body")

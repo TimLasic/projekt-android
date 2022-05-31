@@ -1,7 +1,5 @@
 package com.example.projektandroid
 
-import java.util.*
-
 data class Gyroscope(
     val body: String,
     val _id: String,

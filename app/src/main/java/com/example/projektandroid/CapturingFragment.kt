@@ -9,7 +9,7 @@ import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-import android.location.Location
+//import android.location.Location
 import android.location.LocationListener
 import android.location.LocationManager
 import android.os.Bundle
@@ -29,12 +29,12 @@ import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
+import java.util.Date
 
-class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
+class CapturingFragment : Fragment(), SensorEventListener {
     private var _binding: FragmentCapturingBinding? = null
     private val binding get() = _binding!!
     private lateinit var sensorManager: SensorManager
-    //private lateinit var locationManager: LocationManager
     private var lastUpdateAccelerometer: Long = 0
 
 
@@ -86,47 +86,6 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
         )
 
     }
-
-    /*private fun setUpLocation() {
-        val requestPermissionLauncher =
-            registerForActivityResult(
-                ActivityResultContracts.RequestPermission()
-            ) { isGranted: Boolean ->
-                if (isGranted) {
-                    // Permission is granted. Continue the action or workflow in your
-                    // app.
-                } else {
-                    // Explain to the user that the feature is unavailable because the
-                    // features requires a permission that the user has denied. At the
-                    // same time, respect the user's decision. Don't link to system
-                    // settings in an effort to convince the user to change their
-                    // decision.
-                }
-            }
-
-
-        locationManager = activity?.getSystemService(Context.LOCATION_SERVICE) as LocationManager
-        if (ActivityCompat.checkSelfPermission(
-                requireActivity().applicationContext,
-                Manifest.permission.ACCESS_FINE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(
-                requireActivity().applicationContext,
-                Manifest.permission.ACCESS_COARSE_LOCATION
-            ) != PackageManager.PERMISSION_GRANTED
-        ) {
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_FINE_LOCATION)
-            requestPermissionLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
-            // here to request the missing permissions, and then overriding
-            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-            //                                          int[] grantResults)
-            // to handle the case where the user grants the permission. See the documentation
-            // for ActivityCompat#requestPermissions for more details.
-
-        }
-        val location : Location? = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER);
-
-
-    }*/
 
     @SuppressLint("SetTextI18n")
     override fun onSensorChanged(event: SensorEvent?) {
@@ -232,9 +191,73 @@ class CapturingFragment : Fragment(), SensorEventListener, LocationListener {
         })
     }
 
-    override fun onLocationChanged(location: Location) {
+    private fun addGyroscope(x: Float, y: Float, z: Float) {
+        val gyroscope = Gyroscope(
+            _id = "",
+            body = "",
+            xRotation = x,
+            yRotation = y,
+            zRotation = z,
+            locationId = ""
+        )
 
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+            .build()
+            .create(ApiInterface::class.java)
+
+
+        val retrofitData = retrofitBuilder.addGyroscope(gyroscope)
+        retrofitData.enqueue(object : Callback<Gyroscope?> {
+            override fun onResponse(
+                call: Call<Gyroscope?>,
+                response: Response<Gyroscope?>
+            ) {
+                //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
+                if (response.message() == "OK") {
+
+                    Log.d("CapturingFragment", "On failure, Accelerometer" + response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<Gyroscope?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Gyroscope" + t.message)
+            }
+        })
     }
 
+    private fun addLocation(latitude: Float, longitude: Float, state: String) {
+        val location = Location(
+            _id = "",
+            body = "",
+            latitude = latitude,
+            longitude = longitude,
+            state = state,
+            timestamp = Date()
+        )
 
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+            .build()
+            .create(ApiInterface::class.java)
+
+
+        val retrofitData = retrofitBuilder.addLocation(location)
+        retrofitData.enqueue(object : Callback<Location?> {
+            override fun onResponse(
+                call: Call<Location?>,
+                response: Response<Location?>
+            ) {
+                //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
+                if (response.message() == "OK") {
+
+                    Log.d("CapturingFragment", "On failure, Accelerometer" + response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<Location?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Accelerometer" + t.message)
+            }
+        })
+    }
 }

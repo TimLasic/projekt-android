@@ -2,7 +2,6 @@ package com.example.projektandroid
 
 import java.util.*
 
-
 data class Location (
     val body: String,
     val _id: String,
