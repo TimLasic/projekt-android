@@ -19,6 +19,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.example.projektandroid.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
 
@@ -27,6 +28,7 @@ class MainActivity : AppCompatActivity() {
     private lateinit var fusedLocationClient: FusedLocationProviderClient
     private lateinit var locationRequest: LocationRequest
     private lateinit var locationCallback: LocationCallback
+    private lateinit var app : MyApplication
 
     private var activityResultLauncher: ActivityResultLauncher<Array<String>>
     init {
@@ -43,9 +45,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
+        app = application as MyApplication
+
         setSupportActionBar(binding.toolbar)
         supportActionBar?.hide()
-
 
         val navController = findNavController(R.id.nav_host_fragment_content_main)
         appBarConfiguration = AppBarConfiguration(navController.graph)
@@ -105,7 +108,12 @@ class MainActivity : AppCompatActivity() {
                     // use your location object
                     // get latitude , longitude and other info from this
 
-                    Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
+                    if (app.roadId != "") {
+                        app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), "green")
+                    } else {
+                        app.location = Location("", "", location.latitude.toFloat(), location.longitude.toFloat(), "green", Date(), "")
+                    }
+                    //Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
                 }
 
             }

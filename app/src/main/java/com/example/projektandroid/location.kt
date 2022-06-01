@@ -8,5 +8,6 @@ data class Location (
     val latitude: Float,
     val longitude: Float,
     val state: String,
-    val timestamp: Date
+    val timestamp: Date,
+    var roadId: String
         )

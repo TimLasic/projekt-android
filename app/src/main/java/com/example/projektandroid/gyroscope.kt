@@ -3,8 +3,8 @@ package com.example.projektandroid
 data class Gyroscope(
     val body: String,
     val _id: String,
-    val xRotation: Float,
-    val yRotation: Float,
-    val zRotation: Float,
+    var xRotation: Float,
+    var yRotation: Float,
+    var zRotation: Float,
     val locationId: String
 )

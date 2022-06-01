@@ -24,4 +24,7 @@ interface ApiInterface {
     @POST("gyroscopes")
     fun addGyroscope(@Body GyroscopeData: Gyroscope):Call<Gyroscope>
 
+    @POST("roads")
+    fun addRoad(@Body RoadData: Road):Call<Road>
+
 }
