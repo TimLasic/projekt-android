@@ -12,7 +12,6 @@ import java.util.*
 class MyApplication : Application() {
     var roadId : String = ""
     var locationId : String = ""
-    var location : Location = Location("", "", 0f, 0f, "", Date(), "")
     var accelerometer: Accelerometer = Accelerometer("", "", 0f, 0f, 0f, "")
     var gyroscope: Gyroscope = Gyroscope("", "", 0f, 0f, 0f, "")
     var counterA : Int = 0
@@ -119,11 +118,6 @@ class MyApplication : Application() {
                 }
                 if (response.message() == "Created") {
                     roadId = response.body()!!._id
-
-                    if (location.roadId == "") {
-                        addLocation(location.latitude, location.longitude, location.state)
-                        location.roadId = roadId
-                    }
                 }
             }
 

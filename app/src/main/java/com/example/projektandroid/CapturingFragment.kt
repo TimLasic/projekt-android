@@ -56,6 +56,7 @@ class CapturingFragment : Fragment(), SensorEventListener {
         binding.btnStop.setOnClickListener {
             sensorManager.unregisterListener(this)
             (activity as MainActivity).stopLocationUpdates()
+            //app.roadId = ""
         }
     }
 
