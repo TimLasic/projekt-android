@@ -12,10 +12,42 @@ import java.util.*
 class MyApplication : Application() {
     var roadId : String = ""
     var locationId : String = ""
-    var accelerometer: Accelerometer = Accelerometer("", "", 0f, 0f, 0f, "")
-    var gyroscope: Gyroscope = Gyroscope("", "", 0f, 0f, 0f, "")
+    var accelerometerX : Float = 0f
+    var accelerometerY : Float = 0f
+    var accelerometerZ : Float = 0f
+    var gyroscopeX : Float = 0f
+    var gyroscopeY : Float = 0f
+    var gyroscopeZ : Float = 0f
+
+    var accelerometerBaseX : Float = 100f
+    var accelerometerBaseY : Float = 100f
+    var accelerometerBaseZ : Float = 100f
+    var gyroscopeBaseX : Float = 100f
+    var gyroscopeBaseY : Float = 100f
+    var gyroscopeBaseZ : Float = 100f
+
     var counterA : Int = 0
     var counterG : Int = 0
+    var color : String = "Green"
+
+    fun resetVariables () {
+        accelerometerX = 0f
+        accelerometerY = 0f
+        accelerometerZ = 0f
+
+        gyroscopeX = 0f
+        gyroscopeY = 0f
+        gyroscopeZ = 0f
+    }
+    fun resetVariablesBase () {
+        accelerometerBaseX = 100f
+        accelerometerBaseY = 100f
+        accelerometerBaseZ = 100f
+
+        gyroscopeBaseX = 100f
+        gyroscopeBaseY = 100f
+        gyroscopeBaseZ = 100f
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -127,6 +159,57 @@ class MyApplication : Application() {
         })
     }
 
+    fun algorithm() : String {
+        var result : String = "green"
+        var acceValue : Float = 0f
+        var gyroValue : Float = 0f
+
+        if (accelerometerBaseX == 100f && accelerometerBaseY == 100f && accelerometerBaseZ == 100f && gyroscopeBaseX == 100f && gyroscopeBaseY == 100f && gyroscopeBaseZ == 100f) {
+            accelerometerBaseX = accelerometerX / counterA
+            accelerometerBaseY = accelerometerY / counterA
+            accelerometerBaseZ = accelerometerZ / counterA
+            gyroscopeBaseX = gyroscopeX / counterG
+            gyroscopeBaseY = gyroscopeY / counterG
+            gyroscopeBaseZ = gyroscopeZ / counterG
+            return result
+        } else {
+            if ((gyroscopeX / counterG) > gyroscopeBaseX) {
+                gyroValue += (gyroscopeX / counterG) - gyroscopeBaseX
+            }
+            if ((gyroscopeY / counterG) > gyroscopeBaseY) {
+                gyroValue += (gyroscopeY / counterG) - gyroscopeBaseY
+            }
+            if ((gyroscopeZ / counterG) > gyroscopeBaseZ) {
+                gyroValue += (gyroscopeZ / counterG) - gyroscopeBaseZ
+            }
+
+            if (gyroValue < 3) {
+                if ((accelerometerX / counterA) > accelerometerBaseX) {
+                    acceValue += (accelerometerX / counterA) - accelerometerBaseX
+                }
+                if ((accelerometerY / counterA) > accelerometerBaseY) {
+                    acceValue += (accelerometerY / counterA) - accelerometerBaseY
+                }
+                if ((accelerometerZ / counterA) > accelerometerBaseZ) {
+                    acceValue += (accelerometerZ / counterA) - accelerometerBaseZ
+                }
+
+                if (acceValue <= 3) {
+                    result = "green"
+                } else if (acceValue in 4.0..8.0) {
+                    result = "orange"
+                } else if (acceValue >= 9) {
+                    result = "red"
+                }
+            } else {
+                result = "black"
+            }
+        }
+
+        return result
+    }
+
+
     fun addLocation(latitude: Float, longitude: Float, state: String) {
         val location = Location(
             _id = "",
@@ -159,11 +242,11 @@ class MyApplication : Application() {
                 if (response.message() == "Created") {
                     locationId = response.body()!!._id
 
-                    addAccelerometer(accelerometer.x, accelerometer.y, accelerometer.z, locationId)
-                    addGyroscope(gyroscope.xRotation, gyroscope.yRotation, gyroscope.zRotation, locationId)
+                    addAccelerometer(accelerometerX/counterA, accelerometerY/counterA, accelerometerZ/counterA, locationId)
+                    addGyroscope(gyroscopeX/counterG, gyroscopeY/counterG, gyroscopeZ/counterG, locationId)
 
-                    gyroscope = Gyroscope("", "", 0f, 0f, 0f, response.body()!!._id)
-                    accelerometer = Accelerometer("", "", 0f, 0f, 0f, response.body()!!._id)
+                    resetVariables()
+
                     counterA = 0
                     counterG = 0
                 }

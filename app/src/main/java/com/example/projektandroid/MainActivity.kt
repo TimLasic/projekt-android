@@ -112,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                     if (app.roadId != "") {
                         app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), "green")
                     }
-                    Toast.makeText(applicationContext, location.latitude.toString() + ", " + location.longitude.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
                 }
 
             }
