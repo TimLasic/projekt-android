@@ -130,7 +130,7 @@ class CapturingFragment : Fragment(), SensorEventListener {
 
             app.counterA += 1
 
-            app.accelerometer.x = (app.accelerometer.x + kotlin.math.abs(x))
+            app.accelerometer.x = (app.accelerometer.x + kotlin.math.abs(x)) / app.counterA
             app.accelerometer.y = (app.accelerometer.y + kotlin.math.abs(y)) / app.counterA
             app.accelerometer.z = (app.accelerometer.z + kotlin.math.abs(z)) / app.counterA
         }

@@ -57,7 +57,7 @@ class SecondFragment : Fragment() {
         retrofitData.enqueue(object : Callback<User?> {
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show()
-
+                findNavController().navigate(R.id.action_SecondFragment_to_faceRecognitionFragment)
             }
 
             override fun onFailure(call: Call<User?>, t: Throwable) {

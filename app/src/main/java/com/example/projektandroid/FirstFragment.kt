@@ -56,7 +56,8 @@ class FirstFragment : Fragment() {
                         Snackbar.make(view, "Successfully logged in", Snackbar.LENGTH_SHORT).show()
                         binding.inputUsername.setText("")
                         binding.inputPassword.setText("")
-                        findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                        //findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                        findNavController().navigate(R.id.action_FirstFragment_to_faceRecognitionFragment)
                     }
             }
 

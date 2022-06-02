@@ -59,7 +59,8 @@ class MainActivity : AppCompatActivity() {
             Manifest.permission.ACCESS_NETWORK_STATE,
             Manifest.permission.READ_EXTERNAL_STORAGE,
             Manifest.permission.WRITE_EXTERNAL_STORAGE,
-            Manifest.permission.INTERNET
+            Manifest.permission.INTERNET,
+            Manifest.permission.CAMERA
         )
         activityResultLauncher.launch(appPerms)
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
@@ -111,7 +112,7 @@ class MainActivity : AppCompatActivity() {
                     if (app.roadId != "") {
                         app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), "green")
                     }
-                    //Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
+                    Toast.makeText(applicationContext, location.latitude.toString() + ", " + location.longitude.toString(), Toast.LENGTH_LONG).show()
                 }
 
             }
