@@ -2,44 +2,52 @@ package com.example.projektandroid
 
 import android.app.Application
 import android.util.Log
-import com.google.android.material.snackbar.Snackbar
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import java.util.*
-import kotlin.collections.ArrayList
 
 class MyApplication : Application() {
     var roadId : String = ""
     var locationId : String = ""
-    var accelerometer: Accelerometer = Accelerometer("", "", 0f, 0f, 0f, "")
-    var gyroscope: Gyroscope = Gyroscope("", "", 0f, 0f, 0f, "")
+    var accelerometerX : Float = 0f
+    var accelerometerY : Float = 0f
+    var accelerometerZ : Float = 0f
+    var gyroscopeX : Float = 0f
+    var gyroscopeY : Float = 0f
+    var gyroscopeZ : Float = 0f
+
+    var accelerometerBaseX : Float = 100f
+    var accelerometerBaseY : Float = 100f
+    var accelerometerBaseZ : Float = 100f
+    var gyroscopeBaseX : Float = 100f
+    var gyroscopeBaseY : Float = 100f
+    var gyroscopeBaseZ : Float = 100f
+
     var counterA : Int = 0
     var counterG : Int = 0
+    var color : String = "Green"
 
-    /*
-    //TODO
-    // arrays for our data
-    var accelerometerListX = ArrayList<Int>()
-    var accelerometerListY = ArrayList<Int>()
-    var accelerometerListZ = ArrayList<Int>()
+    fun resetVariables () {
+        accelerometerX = 0f
+        accelerometerY = 0f
+        accelerometerZ = 0f
 
-    var gyroscopeListX = ArrayList<Int>()
-    var gyroscopeListY = ArrayList<Int>()
-    var gyroscopeListZ = ArrayList<Int>()
+        gyroscopeX = 0f
+        gyroscopeY = 0f
+        gyroscopeZ = 0f
+    }
+    fun resetVariablesBase () {
+        accelerometerBaseX = 100f
+        accelerometerBaseY = 100f
+        accelerometerBaseZ = 100f
 
-    //TODO
-    // tmp arrays
-    var accelerometerListXtmp = ArrayList<Int>()
-    var accelerometerListYtmp = ArrayList<Int>()
-    var accelerometerListZtmp = ArrayList<Int>()
-
-    var gyroscopeListXtmp = ArrayList<Int>()
-    var gyroscopeListYtmp = ArrayList<Int>()
-    var gyroscopeListZtmp = ArrayList<Int>()
-    */
+        gyroscopeBaseX = 100f
+        gyroscopeBaseY = 100f
+        gyroscopeBaseZ = 100f
+    }
 
     override fun onCreate() {
         super.onCreate()
@@ -151,85 +159,55 @@ class MyApplication : Application() {
         })
     }
 
-    /*fun algoritem () {
-        //TODO
-        // dobimo max vrednosti vseh arrayov in podarrayi se nastavijo vse na 0
-        var i = 0
-        val accelerometerListXmax = accelerometerListX.maxOrNull() ?: 0
-        while (i < accelerometerListXmax+1) {
-            accelerometerListXtmp.add(0)
-            i+=1
+    fun algorithm() : String {
+        var result : String = "green"
+        var acceValue : Float = 0f
+        var gyroValue : Float = 0f
+
+        if (accelerometerBaseX == 100f && accelerometerBaseY == 100f && accelerometerBaseZ == 100f && gyroscopeBaseX == 100f && gyroscopeBaseY == 100f && gyroscopeBaseZ == 100f) {
+            accelerometerBaseX = accelerometerX / counterA
+            accelerometerBaseY = accelerometerY / counterA
+            accelerometerBaseZ = accelerometerZ / counterA
+            gyroscopeBaseX = gyroscopeX / counterG
+            gyroscopeBaseY = gyroscopeY / counterG
+            gyroscopeBaseZ = gyroscopeZ / counterG
+            return result
+        } else {
+            if ((gyroscopeX / counterG) > gyroscopeBaseX) {
+                gyroValue += (gyroscopeX / counterG) - gyroscopeBaseX
+            }
+            if ((gyroscopeY / counterG) > gyroscopeBaseY) {
+                gyroValue += (gyroscopeY / counterG) - gyroscopeBaseY
+            }
+            if ((gyroscopeZ / counterG) > gyroscopeBaseZ) {
+                gyroValue += (gyroscopeZ / counterG) - gyroscopeBaseZ
+            }
+
+            if (gyroValue < 3) {
+                if ((accelerometerX / counterA) > accelerometerBaseX) {
+                    acceValue += (accelerometerX / counterA) - accelerometerBaseX
+                }
+                if ((accelerometerY / counterA) > accelerometerBaseY) {
+                    acceValue += (accelerometerY / counterA) - accelerometerBaseY
+                }
+                if ((accelerometerZ / counterA) > accelerometerBaseZ) {
+                    acceValue += (accelerometerZ / counterA) - accelerometerBaseZ
+                }
+
+                if (acceValue <= 3) {
+                    result = "green"
+                } else if (acceValue in 4.0..8.0) {
+                    result = "orange"
+                } else if (acceValue >= 9) {
+                    result = "red"
+                }
+            } else {
+                result = "black"
+            }
         }
 
-        val accelerometerListYmax = accelerometerListY.maxOrNull() ?: 0
-        i=0
-        while (i < accelerometerListYmax+1) {
-            accelerometerListYtmp.add(0)
-            i+=1
-        }
-
-        val accelerometerListZmax = accelerometerListZ.maxOrNull() ?: 0
-        i=0
-        while (i < accelerometerListZmax+1) {
-            accelerometerListZtmp.add(0)
-            i+=1
-        }
-
-        val gyroscopeListXmax = gyroscopeListX.maxOrNull() ?: 0
-        i=0
-        while (i < gyroscopeListXmax+1) {
-            gyroscopeListXtmp.add(0)
-            i+=1
-        }
-
-        val gyroscopeListYmax = gyroscopeListY.maxOrNull() ?: 0
-        i=0
-        while (i < gyroscopeListYmax+1) {
-            gyroscopeListYtmp.add(0)
-            i+=1
-        }
-
-        val gyroscopeListZmax = gyroscopeListZ.maxOrNull() ?: 0
-        i=0
-        while (i < gyroscopeListZmax+1) {
-            gyroscopeListZtmp.add(0)
-            i+=1
-        }
-
-        //TODO
-        // count number of items in array to tmp arrays
-        i=0
-        while (i < accelerometerListX.size) {
-            accelerometerListXtmp[accelerometerListX[i]] += 1
-            i+=1
-        }
-        i=0
-        while (i < accelerometerListY.size) {
-            accelerometerListYtmp[accelerometerListY[i]] += 1
-            i+=1
-        }
-        i=0
-        while (i < accelerometerListZ.size) {
-            accelerometerListZtmp[accelerometerListZ[i]] += 1
-            i+=1
-        }
-
-        i=0
-        while (i < gyroscopeListX.size) {
-            gyroscopeListXtmp[gyroscopeListX[i]] += 1
-            i+=1
-        }
-        i=0
-        while (i < gyroscopeListY.size) {
-            gyroscopeListYtmp[gyroscopeListY[i]] += 1
-            i+=1
-        }
-        i=0
-        while (i < gyroscopeListZ.size) {
-            gyroscopeListZtmp[gyroscopeListZ[i]] += 1
-            i+=1
-        }
-    }*/
+        return result
+    }
 
 
     fun addLocation(latitude: Float, longitude: Float, state: String) {
@@ -264,28 +242,13 @@ class MyApplication : Application() {
                 if (response.message() == "Created") {
                     locationId = response.body()!!._id
 
-                    addAccelerometer(accelerometer.x/counterA, accelerometer.y/counterA, accelerometer.z/counterA, locationId)
-                    addGyroscope(gyroscope.xRotation/counterG, gyroscope.yRotation/counterG, gyroscope.zRotation/counterG, locationId)
+                    addAccelerometer(accelerometerX/counterA, accelerometerY/counterA, accelerometerZ/counterA, locationId)
+                    addGyroscope(gyroscopeX/counterG, gyroscopeY/counterG, gyroscopeZ/counterG, locationId)
 
-                    gyroscope = Gyroscope("", "", 0f, 0f, 0f, response.body()!!._id)
-                    accelerometer = Accelerometer("", "", 0f, 0f, 0f, response.body()!!._id)
+                    resetVariables()
+
                     counterA = 0
                     counterG = 0
-                    /*accelerometerListX.clear()
-                    accelerometerListY.clear()
-                    accelerometerListZ.clear()
-
-                    gyroscopeListX.clear()
-                    gyroscopeListY.clear()
-                    gyroscopeListZ.clear()
-
-                    accelerometerListXtmp.clear()
-                    accelerometerListYtmp.clear()
-                    accelerometerListZtmp.clear()
-
-                    gyroscopeListXtmp.clear()
-                    gyroscopeListYtmp.clear()
-                    gyroscopeListZtmp.clear()*/
                 }
             }
 

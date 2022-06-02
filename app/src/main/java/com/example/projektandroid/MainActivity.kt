@@ -109,7 +109,8 @@ class MainActivity : AppCompatActivity() {
                     // get latitude , longitude and other info from this
 
                     if (app.roadId != "") {
-                        app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), "green")
+                        app.color = app.algorithm()
+                        app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), app.color)
                     }
                     Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
                 }

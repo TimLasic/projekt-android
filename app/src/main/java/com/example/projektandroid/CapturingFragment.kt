@@ -49,14 +49,16 @@ class CapturingFragment : Fragment(), SensorEventListener {
         binding.btnStart.setOnClickListener {
             app.addRoad("road")
 
-            (activity as MainActivity).startLocationUpdates()
+            app.resetVariablesBase()
+            app.resetVariables()
+
             setUpSensor()
+            (activity as MainActivity).startLocationUpdates()
         }
 
         binding.btnStop.setOnClickListener {
             sensorManager.unregisterListener(this)
             (activity as MainActivity).stopLocationUpdates()
-            //app.roadId = ""
         }
     }
 
@@ -130,14 +132,10 @@ class CapturingFragment : Fragment(), SensorEventListener {
 
             app.counterA += 1
 
-            app.accelerometer.x = (app.accelerometer.x + kotlin.math.abs(x))
-            app.accelerometer.y = (app.accelerometer.y + kotlin.math.abs(y))
-            app.accelerometer.z = (app.accelerometer.z + kotlin.math.abs(z))
+            app.accelerometerX = (app.accelerometerX + kotlin.math.abs(x))
+            app.accelerometerY = (app.accelerometerY + kotlin.math.abs(y))
+            app.accelerometerZ = (app.accelerometerZ + kotlin.math.abs(z))
 
-            //TODO
-            //app.accelerometerListX.add(x.toInt())
-            //app.accelerometerListY.add(y.toInt())
-            //app.accelerometerListZ.add(z.toInt())
         }
 
         if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
@@ -157,14 +155,10 @@ class CapturingFragment : Fragment(), SensorEventListener {
 
             app.counterG += 1
 
-            app.gyroscope.xRotation = (app.gyroscope.xRotation + kotlin.math.abs(x))
-            app.gyroscope.yRotation = (app.gyroscope.yRotation + kotlin.math.abs(y))
-            app.gyroscope.zRotation = (app.gyroscope.zRotation + kotlin.math.abs(z))
+            app.gyroscopeX = (app.gyroscopeX + kotlin.math.abs(x))
+            app.gyroscopeY = (app.gyroscopeY + kotlin.math.abs(y))
+            app.gyroscopeZ = (app.gyroscopeZ + kotlin.math.abs(z))
 
-            //TODO
-            //app.gyroscopeListX.add(x.toInt())
-            //app.gyroscopeListY.add(y.toInt())
-            //app.gyroscopeListZ.add(z.toInt())
         }
     }
 
