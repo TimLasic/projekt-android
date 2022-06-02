@@ -131,13 +131,13 @@ class CapturingFragment : Fragment(), SensorEventListener {
             app.counterA += 1
 
             app.accelerometer.x = (app.accelerometer.x + kotlin.math.abs(x))
-            app.accelerometer.y = (app.accelerometer.y + kotlin.math.abs(y)) / app.counterA
-            app.accelerometer.z = (app.accelerometer.z + kotlin.math.abs(z)) / app.counterA
+            app.accelerometer.y = (app.accelerometer.y + kotlin.math.abs(y))
+            app.accelerometer.z = (app.accelerometer.z + kotlin.math.abs(z))
 
             //TODO
-            app.accelerometerListX.add(x.toInt())
-            app.accelerometerListY.add(y.toInt())
-            app.accelerometerListZ.add(z.toInt())
+            //app.accelerometerListX.add(x.toInt())
+            //app.accelerometerListY.add(y.toInt())
+            //app.accelerometerListZ.add(z.toInt())
         }
 
         if (event?.sensor?.type == Sensor.TYPE_GYROSCOPE) {
@@ -157,14 +157,14 @@ class CapturingFragment : Fragment(), SensorEventListener {
 
             app.counterG += 1
 
-            app.gyroscope.xRotation = (app.gyroscope.xRotation + kotlin.math.abs(x)) / app.counterG
-            app.gyroscope.yRotation = (app.gyroscope.yRotation + kotlin.math.abs(y)) / app.counterG
-            app.gyroscope.zRotation = (app.gyroscope.zRotation + kotlin.math.abs(z)) / app.counterG
+            app.gyroscope.xRotation = (app.gyroscope.xRotation + kotlin.math.abs(x))
+            app.gyroscope.yRotation = (app.gyroscope.yRotation + kotlin.math.abs(y))
+            app.gyroscope.zRotation = (app.gyroscope.zRotation + kotlin.math.abs(z))
 
             //TODO
-            app.gyroscopeListX.add(x.toInt())
-            app.gyroscopeListY.add(y.toInt())
-            app.gyroscopeListZ.add(z.toInt())
+            //app.gyroscopeListX.add(x.toInt())
+            //app.gyroscopeListY.add(y.toInt())
+            //app.gyroscopeListZ.add(z.toInt())
         }
     }
 

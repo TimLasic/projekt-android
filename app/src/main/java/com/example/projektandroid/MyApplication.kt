@@ -19,7 +19,7 @@ class MyApplication : Application() {
     var counterA : Int = 0
     var counterG : Int = 0
 
-
+    /*
     //TODO
     // arrays for our data
     var accelerometerListX = ArrayList<Int>()
@@ -39,7 +39,7 @@ class MyApplication : Application() {
     var gyroscopeListXtmp = ArrayList<Int>()
     var gyroscopeListYtmp = ArrayList<Int>()
     var gyroscopeListZtmp = ArrayList<Int>()
-
+    */
 
     override fun onCreate() {
         super.onCreate()
@@ -151,7 +151,7 @@ class MyApplication : Application() {
         })
     }
 
-    fun algoritem () {
+    /*fun algoritem () {
         //TODO
         // dobimo max vrednosti vseh arrayov in podarrayi se nastavijo vse na 0
         var i = 0
@@ -229,7 +229,7 @@ class MyApplication : Application() {
             gyroscopeListZtmp[gyroscopeListZ[i]] += 1
             i+=1
         }
-    }
+    }*/
 
 
     fun addLocation(latitude: Float, longitude: Float, state: String) {
@@ -264,14 +264,14 @@ class MyApplication : Application() {
                 if (response.message() == "Created") {
                     locationId = response.body()!!._id
 
-                    addAccelerometer(accelerometer.x, accelerometer.y, accelerometer.z, locationId)
-                    addGyroscope(gyroscope.xRotation, gyroscope.yRotation, gyroscope.zRotation, locationId)
+                    addAccelerometer(accelerometer.x/counterA, accelerometer.y/counterA, accelerometer.z/counterA, locationId)
+                    addGyroscope(gyroscope.xRotation/counterG, gyroscope.yRotation/counterG, gyroscope.zRotation/counterG, locationId)
 
                     gyroscope = Gyroscope("", "", 0f, 0f, 0f, response.body()!!._id)
                     accelerometer = Accelerometer("", "", 0f, 0f, 0f, response.body()!!._id)
                     counterA = 0
                     counterG = 0
-                    accelerometerListX.clear()
+                    /*accelerometerListX.clear()
                     accelerometerListY.clear()
                     accelerometerListZ.clear()
 
@@ -285,7 +285,7 @@ class MyApplication : Application() {
 
                     gyroscopeListXtmp.clear()
                     gyroscopeListYtmp.clear()
-                    gyroscopeListZtmp.clear()
+                    gyroscopeListZtmp.clear()*/
                 }
             }
 
