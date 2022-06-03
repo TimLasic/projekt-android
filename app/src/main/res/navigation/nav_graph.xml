@@ -17,9 +17,6 @@
         <action
             android:id="@+id/action_FirstFragment_to_capturingFragment"
             app:destination="@id/capturingFragment" />
-        <action
-            android:id="@+id/action_FirstFragment_to_faceRecognitionFragment"
-            app:destination="@id/faceRecognitionFragment" />
     </fragment>
     <fragment
         android:id="@+id/SecondFragment"
@@ -30,22 +27,10 @@
         <action
             android:id="@+id/action_SecondFragment_to_FirstFragment"
             app:destination="@id/FirstFragment" />
-        <action
-            android:id="@+id/action_SecondFragment_to_faceRecognitionFragment"
-            app:destination="@id/faceRecognitionFragment" />
     </fragment>
     <fragment
         android:id="@+id/capturingFragment"
         android:name="com.example.projektandroid.CapturingFragment"
         android:label="fragment_capturing"
         tools:layout="@layout/fragment_capturing" />
-    <fragment
-        android:id="@+id/faceRecognitionFragment"
-        android:name="com.example.projektandroid.FaceRecognitionFragment"
-        android:label="fragment_face_recognition"
-        tools:layout="@layout/fragment_face_recognition" >
-        <action
-            android:id="@+id/action_faceRecognitionFragment_to_FirstFragment"
-            app:destination="@id/FirstFragment" />
-    </fragment>
 </navigation>

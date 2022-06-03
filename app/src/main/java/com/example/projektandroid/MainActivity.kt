@@ -13,15 +13,17 @@ import androidx.navigation.ui.navigateUp
 import androidx.navigation.ui.setupActionBarWithNavController
 import android.view.Menu
 import android.view.MenuItem
+import android.view.WindowManager
 import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.app.ActivityCompat
 import com.example.projektandroid.databinding.ActivityMainBinding
 import com.google.android.gms.location.*
+import org.opencv.objdetect.FaceRecognizerSF
 import java.util.*
 
-class MainActivity : AppCompatActivity() {
+class MainActivity() : AppCompatActivity() {
 
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
@@ -42,6 +44,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        window.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
@@ -99,7 +104,7 @@ class MainActivity : AppCompatActivity() {
         locationRequest.smallestDisplacement = 5f // 170 m = 0.1 mile
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
         locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
+            override fun onLocationResult(locationResult: LocationResult) {
                 locationResult ?: return
 
                 if (locationResult.locations.isNotEmpty()) {

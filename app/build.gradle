@@ -33,6 +33,13 @@ android {
         viewBinding true
     }
     namespace 'com.example.projektandroid'
+    sourceSets {
+        main {
+            jni {
+                srcDirs 'src\\main\\jni', 'src\\main\\jniLibs'
+            }
+        }
+    }
 }
 
 dependencies {
