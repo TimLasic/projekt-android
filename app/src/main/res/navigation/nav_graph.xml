@@ -32,5 +32,9 @@
         android:id="@+id/capturingFragment"
         android:name="com.example.projektandroid.CapturingFragment"
         android:label="fragment_capturing"
-        tools:layout="@layout/fragment_capturing" />
+        tools:layout="@layout/fragment_capturing" >
+        <action
+            android:id="@+id/action_capturingFragment_self"
+            app:destination="@id/capturingFragment" />
+    </fragment>
 </navigation>

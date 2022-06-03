@@ -90,7 +90,6 @@ class MainActivity : AppCompatActivity() {
 
      fun getLocationUpdates()
     {
-
         fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
         locationRequest = LocationRequest.create()
         locationRequest.interval = 5000
@@ -112,7 +111,9 @@ class MainActivity : AppCompatActivity() {
                         app.color = app.algorithm()
                         app.addLocation(location.latitude.toFloat(), location.longitude.toFloat(), app.color)
                     }
-                    Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
+
+                    //Toast.makeText(applicationContext, location.toString(), Toast.LENGTH_LONG).show()
+
                 }
 
             }
