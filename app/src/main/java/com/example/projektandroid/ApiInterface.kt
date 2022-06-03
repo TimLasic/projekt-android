@@ -1,9 +1,10 @@
 package com.example.projektandroid
 
+import android.media.Image
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
-import retrofit2.http.Body
-import retrofit2.http.GET
-import retrofit2.http.POST
+import retrofit2.http.*
 
 interface ApiInterface {
     @GET("users")
@@ -26,5 +27,12 @@ interface ApiInterface {
 
     @POST("roads")
     fun addRoad(@Body RoadData: Road):Call<Road>
+
+    @Multipart
+    @POST("users/upload")
+    fun upload(
+        @Part image:MultipartBody.Part,
+        @Part("id") id: RequestBody
+               ):Call<Any>
 
 }

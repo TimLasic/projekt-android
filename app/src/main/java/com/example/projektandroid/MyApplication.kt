@@ -2,11 +2,16 @@ package com.example.projektandroid
 
 import android.app.Application
 import android.util.Log
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
+import retrofit2.http.*
 import retrofit2.converter.gson.GsonConverterFactory
+import java.io.File
 import java.util.*
 
 class MyApplication : Application() {
@@ -29,6 +34,8 @@ class MyApplication : Application() {
     var counterA : Int = 0
     var counterG : Int = 0
     var color : String = "Green"
+
+    var userID: String = ""
 
     fun resetVariables () {
         accelerometerX = 0f
@@ -207,6 +214,35 @@ class MyApplication : Application() {
         }
 
         return result
+    }
+
+
+    fun upload(file:File) {
+
+
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+            .build()
+            .create(ApiInterface::class.java)
+
+
+        val retrofitData = retrofitBuilder.upload(MultipartBody.Part.createFormData("image",file.name,RequestBody.create(MediaType.parse("image/*"), file)),RequestBody.create(MediaType.parse("text/plain"),userID))
+        retrofitData.enqueue(object : Callback<Any?> {
+            override fun onResponse(
+                call: Call<Any?>,
+                response: Response<Any?>
+            ) {
+                //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
+                if (response.message() == "OK") {
+
+                    Log.d("CapturingFragment", "On success, Image" + response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<Any?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Image" + t.message)
+            }
+        })
     }
 
 
