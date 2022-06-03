@@ -1,22 +1,25 @@
 package com.example.projektandroid
 
+//import android.location.Location
+import android.animation.ArgbEvaluator
+import android.animation.ObjectAnimator
 import android.annotation.SuppressLint
 import android.content.Context
-
+import android.graphics.Color
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
-//import android.location.Location
 import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.Animation
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.navigation.fragment.findNavController
 import com.example.projektandroid.databinding.FragmentCapturingBinding
-import java.lang.Math.abs
 
 class CapturingFragment : Fragment(), SensorEventListener {
     private var _binding: FragmentCapturingBinding? = null
@@ -24,7 +27,6 @@ class CapturingFragment : Fragment(), SensorEventListener {
     private lateinit var sensorManager: SensorManager
     private var lastUpdateAccelerometer: Long = 0
     private lateinit var app : MyApplication
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -41,6 +43,7 @@ class CapturingFragment : Fragment(), SensorEventListener {
         return binding.root
     }
 
+    @SuppressLint("Recycle")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         (activity as AppCompatActivity).supportActionBar?.title = "Capture"
         super.onViewCreated(view, savedInstanceState)
@@ -52,6 +55,13 @@ class CapturingFragment : Fragment(), SensorEventListener {
             app.resetVariablesBase()
             app.resetVariables()
 
+            val animator = ObjectAnimator.ofInt(binding.workIndicator, "backgroundColor", Color.RED, Color.WHITE)
+            animator.duration = 1000;
+            animator.setEvaluator(ArgbEvaluator())
+            animator.repeatCount = Animation.REVERSE;
+            animator.repeatCount = Animation.INFINITE;
+            animator.start()
+
             setUpSensor()
             (activity as MainActivity).startLocationUpdates()
         }
@@ -59,6 +69,7 @@ class CapturingFragment : Fragment(), SensorEventListener {
         binding.btnStop.setOnClickListener {
             sensorManager.unregisterListener(this)
             (activity as MainActivity).stopLocationUpdates()
+            findNavController().navigate(R.id.action_capturingFragment_self)
         }
     }
 
