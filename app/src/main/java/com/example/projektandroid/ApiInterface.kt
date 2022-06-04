@@ -3,6 +3,7 @@ package com.example.projektandroid
 import android.media.Image
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -31,8 +32,8 @@ interface ApiInterface {
     @Multipart
     @POST("users/upload")
     fun upload(
-        @Part image:MultipartBody.Part,
+        @Part image : MultipartBody.Part,
         @Part("id") id: RequestBody
-               ):Call<Any>
+               ):Call<ResponseBody>
 
 }

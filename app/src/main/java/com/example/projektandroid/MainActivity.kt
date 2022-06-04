@@ -97,7 +97,7 @@ class MainActivity : AppCompatActivity() {
         locationRequest.smallestDisplacement = 5f // 170 m = 0.1 mile
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY //set according to your app function
         locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
+            override fun onLocationResult(locationResult: LocationResult) {
                 locationResult ?: return
 
                 if (locationResult.locations.isNotEmpty()) {

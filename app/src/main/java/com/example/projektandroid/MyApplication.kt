@@ -1,21 +1,26 @@
 package com.example.projektandroid
 
 import android.app.Application
+import android.net.Uri
+import android.os.FileUtils
 import android.util.Log
+import android.widget.Toast
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import retrofit2.Retrofit
-import retrofit2.http.*
 import retrofit2.converter.gson.GsonConverterFactory
 import java.io.File
 import java.util.*
 
+
 class MyApplication : Application() {
     var roadId : String = ""
+    var username : String = ""
     var locationId : String = ""
     var accelerometerX : Float = 0f
     var accelerometerY : Float = 0f
@@ -130,8 +135,6 @@ class MyApplication : Application() {
         })
     }
 
-
-
     fun addRoad(name: String) {
         val road = Road(
             _id = "",
@@ -216,36 +219,6 @@ class MyApplication : Application() {
         return result
     }
 
-
-    fun upload(file:File) {
-
-
-        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
-            .baseUrl("https://projekt-glz.herokuapp.com/")
-            .build()
-            .create(ApiInterface::class.java)
-
-
-        val retrofitData = retrofitBuilder.upload(MultipartBody.Part.createFormData("image",file.name,RequestBody.create(MediaType.parse("image/*"), file)),RequestBody.create(MediaType.parse("text/plain"),userID))
-        retrofitData.enqueue(object : Callback<Any?> {
-            override fun onResponse(
-                call: Call<Any?>,
-                response: Response<Any?>
-            ) {
-                //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
-                if (response.message() == "OK") {
-
-                    Log.d("CapturingFragment", "On success, Image" + response.message())
-                }
-            }
-
-            override fun onFailure(call: Call<Any?>, t: Throwable) {
-                Log.d("CapturingFragment", "On failure, Image" + t.message)
-            }
-        })
-    }
-
-
     fun addLocation(latitude: Float, longitude: Float, state: String) {
         val location = Location(
             _id = "",
@@ -294,4 +267,78 @@ class MyApplication : Application() {
         })
     }
 
+    fun upload(originalFile : File) {
+
+        var userId = RequestBody.create(MultipartBody.FORM, userID)
+
+        var fileUri = Uri.fromFile(originalFile)
+
+        var filePart = RequestBody.create(
+            MediaType.parse(contentResolver.getType(fileUri).toString()),
+            originalFile
+        )
+
+        var file = MultipartBody.Part.createFormData("image", originalFile.name, filePart)
+
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+
+        var retrofit = retrofitBuilder.build()
+
+        var client = retrofit.create(ApiInterface::class.java)
+
+        var call = client.upload(file, userId)
+        call.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(
+                call: Call<ResponseBody?>,
+                response: Response<ResponseBody?>
+            ) {
+                Toast.makeText(applicationContext, "yeah!", Toast.LENGTH_SHORT).show()
+                Log.d("YEAH!", "fileCreated")
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Image: " + t.message)
+            }
+        })
+    }
+
 }
+
+/*fun upload(file:File) {
+
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+            .build()
+            .create(ApiInterface::class.java)
+
+
+        val requestFile : RequestBody = RequestBody.create(MediaType.parse("multipart/form-data"), file)
+        val multipart : MultipartBody.Part = MultipartBody.Part.createFormData("image",file.name,requestFile)
+        val requestBody : RequestBody = RequestBody.create(MediaType.parse("text/plain"),"image")
+        Log.d("multipart ", multipart.toString())
+        Log.d("requestBody ", requestBody.toString())
+        val retrofitData = retrofitBuilder.upload(multipart, requestBody)
+
+        retrofitData.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(
+                call: Call<ResponseBody?>,
+                response: Response<ResponseBody?>
+            ) {
+                //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
+
+                if (response.code() == 200) {
+                    Log.d("ZMAJ","Uploaded Successfully!");
+                }
+
+                if (response.message() == "OK") {
+
+                    Log.d("CapturingFragment", "On success, Image: " + response.message())
+                }
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Image: " + t.message)
+            }
+        })
+    }*/
