@@ -54,6 +54,7 @@ class FirstFragment : Fragment() {
                 var file : File = File(currentPhotoPath)
                 Log.d("PENIS", file.toString())
                 app.upload(file)
+                findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
             }
         }
 
@@ -87,6 +88,7 @@ class FirstFragment : Fragment() {
             .create(ApiInterface::class.java)
 
 
+        Log.d("USERNAME: ", user.username)
         val retrofitData = retrofitBuilder.logInUser(user)
         retrofitData.enqueue(object : Callback<User?> {
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
