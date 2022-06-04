@@ -96,23 +96,31 @@ class FirstFragment : Fragment() {
                         call: Call<ResponseBody?>,
                         response: Response<ResponseBody?>
                     ) {
-                        response.body()?.let {
-                            if ("Unlocked" in it.string()) {
-                                app.unlocked = true
-                                findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                        Log.d("message", response.message())
+                        /*if (response.message() == "201") {
+                        }*/
+                        if (response.code() == 201) {
+                            response.body()?.let {
+                                if ("Unlocked" in it.string()) {
+                                    app.unlocked = true
+                                    findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                                }
                             }
+                        }
+
+                        if (response.code() == 200) {
+                            Toast.makeText(
+                                    requireContext(),
+                                    "Not recognized",
+                                    Toast.LENGTH_LONG
+                            ).show()
+                            dispatchTakePictureIntent()
+                            activityResultLauncher.launch(intent)
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
                         Log.d("CapturingFragment", "On failure, pyscript: " + t.message)
-                        Toast.makeText(
-                            requireContext(),
-                            "Not recognized",
-                            Toast.LENGTH_LONG
-                        ).show()
-                        dispatchTakePictureIntent()
-                        activityResultLauncher.launch(intent)
                     }
                 })
 
