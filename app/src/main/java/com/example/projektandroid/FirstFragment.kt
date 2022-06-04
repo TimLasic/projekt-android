@@ -57,7 +57,6 @@ class FirstFragment : Fragment() {
                 //val f: File = File(currentPhotoPath)
                 //imageView.setImageURI(Uri.fromFile(f))
                 var file : File = File(currentPhotoPath)
-                Log.d("PENIS", file.toString())
                 upload(file)
             }
         }
@@ -167,8 +166,6 @@ class FirstFragment : Fragment() {
 
                     app.username = response.body()!!.username
                     app.userID = response.body()!!._id
-                    Log.d("login USERNAME:", app.username)
-                    Log.d("login id:", app.userID)
                     //findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
                     //findNavController().navigate(R.id.action_FirstFragment_to_faceRecognitionFragment)
                     activityResultLauncher.launch(intent)
