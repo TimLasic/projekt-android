@@ -11,6 +11,9 @@ interface ApiInterface {
     @GET("users")
     fun getUsers(): Call<List<User>>
 
+    @POST("users/pyscript")
+    fun getPyscript(@Body Userdata: User): Call<ResponseBody>
+
     @POST("users/login")
     fun logInUser(@Body Userdata: User): Call<User>
 

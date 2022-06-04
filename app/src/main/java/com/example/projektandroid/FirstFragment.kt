@@ -20,10 +20,15 @@ import retrofit2.Response
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import android.util.Log
+import android.widget.Toast
 import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import com.google.android.material.snackbar.Snackbar
+import okhttp3.MediaType
+import okhttp3.MultipartBody
+import okhttp3.RequestBody
+import okhttp3.ResponseBody
 import java.io.File
 import java.io.IOException
 
@@ -53,12 +58,74 @@ class FirstFragment : Fragment() {
                 //imageView.setImageURI(Uri.fromFile(f))
                 var file : File = File(currentPhotoPath)
                 Log.d("PENIS", file.toString())
-                app.upload(file)
-                findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                upload(file)
             }
         }
 
         dispatchTakePictureIntent()
+    }
+
+    private fun upload(originalFile : File) {
+
+        var userId = RequestBody.create(MultipartBody.FORM, app.userID)
+
+        var fileUri = Uri.fromFile(originalFile)
+
+        var filePart = RequestBody.create(
+            MediaType.parse(app.contentResolver.getType(fileUri).toString()),
+            originalFile
+        )
+
+        var file = MultipartBody.Part.createFormData("image", originalFile.name, filePart)
+
+        val retrofitBuilder = Retrofit.Builder().addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://projekt-glz.herokuapp.com/")
+
+        var retrofit = retrofitBuilder.build()
+
+        var client = retrofit.create(ApiInterface::class.java)
+
+        var call = client.upload(file, userId)
+        call.enqueue(object : Callback<ResponseBody?> {
+            override fun onResponse(
+                call: Call<ResponseBody?>,
+                response: Response<ResponseBody?>
+            ) {
+                var call1 = client.getPyscript(User("", "", app.username, "", "", ""))
+                call1.enqueue(object : Callback<ResponseBody?> {
+                    override fun onResponse(
+                        call: Call<ResponseBody?>,
+                        response: Response<ResponseBody?>
+                    ) {
+                        response.body()?.let {
+                            if ("Unlocked" in it.string()) {
+                                app.unlocked = true
+                                findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                            }
+                        }
+                    }
+
+                    override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                        Log.d("CapturingFragment", "On failure, pyscript: " + t.message)
+                        Toast.makeText(
+                            requireContext(),
+                            "Not recognized",
+                            Toast.LENGTH_LONG
+                        ).show()
+                        dispatchTakePictureIntent()
+                        activityResultLauncher.launch(intent)
+                    }
+                })
+
+
+                Toast.makeText(requireContext(), "yeah!", Toast.LENGTH_SHORT).show()
+                Log.d("YEAH!", "fileCreated")
+            }
+
+            override fun onFailure(call: Call<ResponseBody?>, t: Throwable) {
+                Log.d("CapturingFragment", "On failure, Image: " + t.message)
+            }
+        })
     }
 
     override fun onCreateView(
@@ -93,17 +160,19 @@ class FirstFragment : Fragment() {
         retrofitData.enqueue(object : Callback<User?> {
             override fun onResponse(call: Call<User?>, response: Response<User?>) {
                 //Snackbar.make(view, response.message(), Snackbar.LENGTH_SHORT).show() //Successfully logged in
-                    if (response.message() == "OK") {
-                        Snackbar.make(view, "Successfully logged in", Snackbar.LENGTH_SHORT).show()
-                        binding.inputUsername.setText("")
-                        binding.inputPassword.setText("")
+                if (response.message() == "OK") {
+                    Snackbar.make(view, "Successfully logged in", Snackbar.LENGTH_SHORT).show()
+                    binding.inputUsername.setText("")
+                    binding.inputPassword.setText("")
 
-                        app.username = response.body()!!.username
-                        app.userID = response.body()!!._id
-                        //findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
-                        //findNavController().navigate(R.id.action_FirstFragment_to_faceRecognitionFragment)
-                        activityResultLauncher.launch(intent)
-                    }
+                    app.username = response.body()!!.username
+                    app.userID = response.body()!!._id
+                    Log.d("login USERNAME:", app.username)
+                    Log.d("login id:", app.userID)
+                    //findNavController().navigate(R.id.action_FirstFragment_to_capturingFragment)
+                    //findNavController().navigate(R.id.action_FirstFragment_to_faceRecognitionFragment)
+                    activityResultLauncher.launch(intent)
+                }
             }
 
             override fun onFailure(call: Call<User?>, t: Throwable) {
